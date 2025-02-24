@@ -1,0 +1,52 @@
+import requests
+from bs4 import BeautifulSoup
+
+base_url = 'https://stackoverflow.com/questions'
+r_ques = requests.get(base_url, timeout=10).text
+
+# ... (previous code remains unchanged) ...
+
+with open('stackoverflow_links.txt', 'w', encoding='utf-8') as file:
+    for link in links:
+        href = link.get('href')     
+        print(href)
+        if href:
+            processed_text = clear_links(href)
+            
+            # Make sure we're using the full URL
+            full_url = 'https://stackoverflow.com' + href if href.startswith('/') else base_url + href
+            r_ans = requests.get(full_url, timeout=10).text
+            soop_ans = BeautifulSoup(r_ans, 'html.parser')
+            
+            # Let's try to find the post body
+            post_body = soop_ans.find("div", class_="post-layout")
+            if post_body:
+                print(f"Found post body for {href}")
+                
+                # Try to find the question text
+                question_body = post_body.find("div", class_="s-prose js-post-body")
+                if question_body:
+                    print("Question body:")
+                    print(question_body.get_text(strip=True)[:200] + "...") # Print first 200 characters
+                else:
+                    print("Couldn't find question body")
+                
+                # Try to find answers
+                answers = soop_ans.find_all("div", class_="answer")
+                print(f"Found {len(answers)} answers")
+                
+                for i, answer in enumerate(answers[:2], 1): # Print details of first 2 answers
+                    answer_body = answer.find("div", class_="s-prose js-post-body")
+                    if answer_body:
+                        print(f"Answer {i}:")
+                        print(answer_body.get_text(strip=True)[:200] + "...") # Print first 200 characters
+            else:
+                print(f"Couldn't find post body for {href}")
+            
+            print("\n" + "="*50 + "\n") # Separator between posts
+
+# Remove the following lines as they're now incorporated in the loop above
+# r_ans = requests.get(base_url + href, timeout=10).text
+# soop_ans = BeautifulSoup(r_ans, 'html.parser')
+# item_prop = soop_ans.find_all("div", class_="inner-content clearfix")
+# print(item_prop)
