@@ -11,13 +11,9 @@ def clear_links(links):
     return ""
 soup = BeautifulSoup(r, 'html.parser')
 main_bar = soup.find("div", id="mainbar")
-
-if main_bar:
-    links = main_bar.find_all("a", class_="s-link")
-    for link in links:
-        href = link.get('href')
-        if href:
-            processed_text = clear_links(href)
-            print(processed_text)
-else:
-    print("No 'mainbar' element found.")
+links = main_bar.find_all("a", class_="s-link")
+for link in links:
+    href = link.get('href')
+    if href:
+        processed_text = clear_links(href)
+    print(processed_text)
