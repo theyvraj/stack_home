@@ -8,7 +8,6 @@ def clear_links(links):
         left_text = '/'.join(parts[3:])
         req_text = left_text.replace('-', ' ')
         return req_text
-    return ""
 soup = BeautifulSoup(r, 'html.parser')
 main_bar = soup.find("div", id="mainbar")
 links = main_bar.find_all("a", class_="s-link")
