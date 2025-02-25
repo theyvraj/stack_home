@@ -12,5 +12,5 @@ for a_tag in soup.find_all('a', href=True):
     if "/p/" in a_tag["href"]:
         links.add("https://www.flipkart.com" + a_tag["href"])
 with open('flipkart_links.txt', 'w') as file:
-    for link in links:
-        file.write(link + "\n")
+    for i, link in enumerate(links, start=1):
+        file.write(f"{i}. {link} + \n")
