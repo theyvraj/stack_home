@@ -9,9 +9,14 @@ r = requests.get(full_url, headers=headers, timeout=10)
 r.raise_for_status()
 soup = BeautifulSoup(r.text, 'html.parser')
 links = set()
-for a_tag in soup.find_all(class_=["WKTcLC BwBZTg", "WKTcLC"]):
-    if "/p/" in a_tag["href"]:
-        links.add("https://www.flipkart.com" + a_tag["href"])
+a_tags = soup.find_all(class_=["WKTcLC BwBZTg", "WKTcLC"])
+for a in a_tags:
+    title = a.find_previous_sibling()
+    print(title)
+    href = a.get('href')
+    if href and "/p/" in href:
+        full_link = "https://www.flipkart.com" + href
+        links.add(full_link)
 with open('flipkart_links.txt', 'w') as file:
     for i, link in enumerate(links, start=1):
-        file.write(f"{i}. {link} + \n")
+        file.write(f"{i}. {title} {link} + \n")
