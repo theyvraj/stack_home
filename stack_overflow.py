@@ -36,14 +36,10 @@ with open('stackoverflow_links.txt', 'w', encoding='utf-8') as file:
                 #print(f"Found post body for {href}")
                 question_body_elem = post_body.find("div", class_="s-prose js-post-body")
                 if question_body_elem:
-                    question_body = question_body_elem.get_text(strip=True)
-                    
+                    question_body = question_body_elem.get_text(strip=True)                    
                 answers = soop_ans.find_all("div", class_="answer")
-                #print(f"Found {len(answers)} answers")
-                
+                #print(f"Found {len(answers)} answers")                
                 for i, answer in enumerate(answers[:2], 1):
                     answer_body = answer.find("div", class_="s-prose js-post-body")
-                    
-            
             output = format_question_body_output(link_text, question_body, answer_body)
             file.write(output + "\n\n")
